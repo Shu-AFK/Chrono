@@ -4,8 +4,8 @@
 #include "output.h"
 #include "input.h"
 
-/* init */
 
+/* init */
 int main(void) {
     enableRawMode();
     setDefaultKeybinds();
