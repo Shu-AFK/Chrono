@@ -10,7 +10,6 @@ void editorDrawRows() {
     int y;
     for(y = 0; y < E.screenrows; y++) {
         write(STDIN_FILENO, "~\r\n", 3); // Writes tildes at the start of every line
-        printf("%i : %i\r\n", E.screenrows, E.screencols);
     }
 }
 
