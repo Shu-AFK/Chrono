@@ -28,7 +28,6 @@ Chrono is licensed under the MIT License - see the [LICENSE](LICENSE.md) file fo
 ## Acknowledgments
 
 - Thanks to all the open-source projects that inspired Chrono.
-- Special thanks to the community for their valuable feedback and contributions.
 
 ---
 
