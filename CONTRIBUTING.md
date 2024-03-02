@@ -14,13 +14,13 @@ Contributions are made to this repo via Issues and Pull Requests (PRs). A few ge
 
 This section guides you through submitting a bug report for Chrono. Following these guidelines helps maintainers and the community understand your report, reproduce the behavior, and find related reports.
 
-Before submitting a bug report, please make sure that you've checked the existing issues to avoid duplicating reports. When you are creating a bug report, please include as many details as possible. Fill out the [required template](ISSUE_TEMPLATE/bug_report.md), the information it asks for helps us resolve issues faster.
+Before submitting a bug report, please make sure that you've checked the existing issues to avoid duplicating reports. When you are creating a bug report, please include as many details as possible.
 
 ### Suggesting Enhancements
 
 This section guides you through submitting an enhancement suggestion for Chrono, including completely new features and minor improvements to existing functionality.
 
-Before creating enhancement suggestions, please check the issue list as you might find out that you don't need to create one. When you are creating an enhancement suggestion, please include as many details as possible. Fill in the [template](ISSUE_TEMPLATE/feature_request.md), including the steps that you imagine you would take if the feature you're requesting existed.
+Before creating enhancement suggestions, please check the issue list as you might find out that you don't need to create one. When you are creating an enhancement suggestion, please include as many details as possible.
 
 ### Your First Code Contribution
 
