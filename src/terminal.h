@@ -80,7 +80,7 @@ int getWindowSize(int *rows, int *cols) {
     }
 }
 
-void initEditor{
+void initEditor() {
     if(getWindowSize(&E.screenrows, &E.screencols) == -1) die("getWindowSize");
     write(STDOUT_FILENO, "\x1b[H", 3); // Moves the cursor to the top right of the screen
 
