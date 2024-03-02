@@ -1,6 +1,6 @@
 # Compiler and flags
 CC=gcc
-CFLAGS=-Wall -Wextra -pedantic -std=c99 -MMD -MP
+CFLAGS=-g -Wall -Wextra -pedantic -std=c99 -MMD -MP
 BUILD_DIR=build
 
 # Source and object files

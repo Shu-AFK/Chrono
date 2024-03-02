@@ -1,6 +1,13 @@
 #ifndef CHRONO_OUTPUT
 #define CHRONO_OUTPUT
 
+//Defines for strdup
+#ifdef __STDC_ALLOC_LIB__
+#define __STDC_WANT_LIB_EXT2__ 1
+#else
+#define _POSIX_C_SOURCE 200809L
+#endif
+
 #include <unistd.h>
 #include <string.h>
 #include <stdio.h>
@@ -19,13 +26,6 @@ char *logo =
 " \\:\\ \\/__/ \\/\\::/  / \\;:::/  / \\:\\/:/  / \\/|::/  / \\:\\/:/  /\r\n"
 "  \\:\\__\\     /:/  /   |:\\/__/   \\::/  /    |:/  /   \\::/  / \r\n"
 "   \\/__/     \\/__/     \\|__|     \\/__/     \\/__/     \\/__/";
-
-char *strdup(const char *s) {
-    char *d = malloc(strlen(s) + 1);
-    if (d == NULL) return NULL;
-    strcpy(d, s);
-    return d;
-}
 
 /* output  */
 void editorDrawRows(struct abuf *ab) {
@@ -57,37 +57,67 @@ int getLogoMaxWidth() {
 }
 
 void drawWelcome(struct abuf *ab) {
+    int newLogoRows = 0;
     int logoWidth = getLogoMaxWidth();
+
     int padding = (E.screencols - logoWidth) / 2;
-    if (padding < 0) padding = 0;
+    if(padding < 0) padding = 0;
 
     int verticalPadding = (2 * E.screenrows) / 5;
 
-    // Assuming vertical centering in the upper half of the screen, adjust verticalPadding if needed
-    for (int i = 0; i < verticalPadding - LOGOLINES / 2; i++) {
-        appendBuf(ab, "\x1b[K", 3);
-        appendBuf(ab, "\r\n", 2); // Adding vertical padding at the top
-    }
+    // Format the string with padding:
+    int newSize = strlen(logo) + LOGOLINES + (padding + 1) + verticalPadding * (E.screencols + 2) + 1;
+    char *newLogo = malloc(newSize);
+    if(newLogo == NULL) die("NewLogo");
 
-    char *logoCopy = strdup(logo);
-    if (logoCopy == NULL) {
-        die("Allocation failed for logoCopy");
-    }
+    newLogo[0] = '\0';
 
-    char *line = strtok(logoCopy, "\r\n");
-    while (line != NULL) {
-        for (int i = 0; i < padding; ++i) {
-            appendBuf(ab, " ", 1); // Apply padding directly without using a buffer
+    // Add vertical padding
+    for (int i = 0; i < verticalPadding; ++i) {
+        for (int j = 0; j < E.screencols; ++j) {
+            strcat(newLogo, " "); // Fill the line with spaces
         }
-
-        appendBuf(ab, line, strlen(line));
-        appendBuf(ab, "\r\n", 2); // Add newline after the logo line
-
-        line = strtok(NULL, "\r\n");
+        strcat(newLogo, "\r\n"); // Add newline at the end of each padded line
     }
 
-    free(line);
+    // Duplicating the logo string so the original doesn't get modified
+    char *logoCopy = strdup(logo);
+    if(logoCopy == NULL) { free(newLogo); die("NewLogo"); }
+
+    // Buffer to hold one line of the padded logo
+    char *lineBuffer = malloc(E.screencols + 2);
+    if(lineBuffer == NULL) { free(newLogo); free(logoCopy); die("NewLogo"); }
+
+    char *line = strtok(logoCopy, "\n");
+    while(line != NULL) {
+        newLogoRows++;
+
+        // Reset the line and fill it with spaces for padding
+        memset(lineBuffer, ' ', E.screencols);
+        lineBuffer[E.screencols] = '\0';
+
+        // Copy the logo line into the buffer at the right offset
+        strncpy(lineBuffer + padding, line, strlen(line));
+
+        // Ensure the line ends with a newline Character
+        lineBuffer[padding + strlen(line)] = '\r';
+        lineBuffer[padding + strlen(line) + 1] = '\n';
+        lineBuffer[padding + strlen(line) + 2] = '\0';
+
+        // Prints the line buffer to the terminal
+        appendBuf(ab, lineBuffer, strlen(lineBuffer));
+
+        // Append the new logo
+        strcat(newLogo, lineBuffer);
+        line = strtok(NULL, "\n");
+    }
+    free(lineBuffer);
     free(logoCopy);
+    free(newLogo);
+
+    for(int i = newLogoRows - 1; i < E.screenrows; i++) {
+        appendBuf(ab, "\r\n", 2);
+    }
 }
 
 void editorRefreshScreen() {
