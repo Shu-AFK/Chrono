@@ -2,7 +2,6 @@
 #define CHRONO_INPUT
 
 #include "keybinds.h"
-#include "terminal.h"
 
 /* input */
 void editorProcessKeypress() {

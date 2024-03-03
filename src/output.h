@@ -61,7 +61,7 @@ void drawWelcome(struct abuf *ab) {
     int padding = (E.screencols - logoWidth) / 2;
     if (padding < 0) padding = 0;
 
-    int verticalPadding = (2 * E.screenrows) / 5;
+    int verticalPadding = (E.screenrows) / 4;
 
     // Assuming vertical centering in the upper half of the screen, adjust verticalPadding if needed
     for (int i = 0; i < verticalPadding - LOGOLINES / 2; i++) {
@@ -98,7 +98,10 @@ void editorRefreshScreen() {
 
     drawWelcome(&ab);
 
-    appendBuf(&ab, "\x1b[H", 3);
+    char buf[32];
+    snprintf(buf, sizeof(buf), "\x1b[%d;%dH", E.cy + 1, E.cx + 1);
+    appendBuf(&ab, buf, strlen(buf));
+
     appendBuf(&ab, "\x1b[?25h", 6); // Displays the cursor again
 
     write(STDIN_FILENO, ab.buf, ab.len);

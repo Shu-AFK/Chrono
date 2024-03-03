@@ -81,10 +81,11 @@ int getWindowSize(int *rows, int *cols) {
 }
 
 void initEditor() {
+    E.cx = 0;
+    E.cy = 0;
+
     if(getWindowSize(&E.screenrows, &E.screencols) == -1) die("getWindowSize");
     write(STDOUT_FILENO, "\x1b[H", 3); // Moves the cursor to the top right of the screen
-
-    printf("%i : %i\r\n", E.screenrows, E.screencols);
 }
 
 #endif // CHRONO_TERMINAL

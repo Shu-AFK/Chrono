@@ -6,7 +6,7 @@
 
 
 /* init */
-int main(void) {
+int main() {
     enableRawMode();
     setDefaultKeybinds();
     initEditor();
