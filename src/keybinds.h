@@ -25,19 +25,27 @@ void quitAction() {
 void openAction() {}
 
 void cursorUpAction() {
-    E.cy--;
+    if(E.cy != 0) {
+        E.cy--;
+    }
 }
 
 void cursorDownAction() {
-    E.cy++;
+    if(E.cy != E.screenrows - 1) {
+        E.cy++;
+    }
 }
 
 void cursorLeftAction() {
-    E.cx--;
+    if(E.cx != 0) {
+        E.cx--;
+    }
 }
 
 void cursorRightAction() {
-    E.cx++;
+    if(E.cx != E.screencols - 1) {
+        E.cx++;
+    }
 }
 
 void setMultibyteKeybinds(const int pos, const int buf, void (*action)()) {
