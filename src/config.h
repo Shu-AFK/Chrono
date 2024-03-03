@@ -11,4 +11,18 @@ struct editorConfig {
     int screencols;
 };
 
+enum arrowKeys {
+    ARROW_LEFT = 1000,
+    ARROW_RIGHT = 1001,
+    ARROW_UP = 1002,
+    ARROW_DOWN = 1003
+};
+
+typedef struct {
+    int input;
+    void (*action)();
+} Keybinding;
+
+
+
 #endif // CHRONO_CONFIG

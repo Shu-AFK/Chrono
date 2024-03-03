@@ -13,11 +13,6 @@
 #define KEYBINDS_LENGTH 6 // Amount of possible keybinds
 #define CTRL_KEY(c) ((c) & 0x1f)
 
-typedef struct {
-    char input;
-    void (*action)();
-} Keybinding;
-
 Keybinding keybinds[KEYBINDS_LENGTH];
 
 /* Actions */
@@ -45,21 +40,26 @@ void cursorRightAction() {
     E.cx++;
 }
 
+void setMultibyteKeybinds(const int pos, const int buf, void (*action)()) {
+    keybinds[pos].input = buf;
+    keybinds[pos].action = action;
+}
+
 /* Set Keybinds */
 void setDefaultKeybinds() {
-    keybinds[0] = (Keybinding) { .input = CTRL_KEY('q'), .action = quitAction  };
-    keybinds[1] = (Keybinding) { .input = CTRL_KEY('o'), .action = openAction  };
-    keybinds[2] = (Keybinding) { .input = 'w', .action = cursorUpAction };
-    keybinds[3] = (Keybinding) { .input = 'a', .action = cursorLeftAction };
-    keybinds[4] = (Keybinding) { .input = 's', .action = cursorDownAction };
-    keybinds[5] = (Keybinding) { .input = 'd', .action = cursorRightAction };
+    setMultibyteKeybinds(0, (int) CTRL_KEY('q'), quitAction);
+    setMultibyteKeybinds(1, (int) CTRL_KEY('o'), openAction);
+    setMultibyteKeybinds(2, ARROW_UP, cursorUpAction);
+    setMultibyteKeybinds(3, ARROW_LEFT, cursorLeftAction);
+    setMultibyteKeybinds(4, ARROW_DOWN, cursorDownAction);
+    setMultibyteKeybinds(5, ARROW_RIGHT, cursorRightAction);
 }
 
 // TODO: Load keybinds from settings.json
 
 
 /* Execute */
-void executeAction(char input) {
+void executeAction(int input) {
     for(int i = 0; i < KEYBINDS_LENGTH; i++) {
         if(keybinds[i].input == input) {
             keybinds[i].action();

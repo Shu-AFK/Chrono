@@ -7,6 +7,9 @@
 #include <sys/ioctl.h>
 #include <stdio.h>
 
+#include "keybinds.h"
+#include "config.h"
+
 struct editorConfig E;
 
 /* terminal */
@@ -37,13 +40,34 @@ void enableRawMode() {
     if(tcsetattr(STDIN_FILENO, TCSAFLUSH, &raw) == -1) die("tcgetattr");
 }
 
-char editorReadKey() {
+int editorReadKey() {
     int nread;
     char c;
     while((nread = read(STDIN_FILENO, &c, 1)) != 1) {
         if(nread == -1 && errno != EAGAIN) die("read");
     }
-    return c;
+
+    if(c == '\x1b') {
+        char seq[3];
+
+        if(read(STDIN_FILENO, &seq[0], 1) != 1) return '\x1b';
+        if(read(STDIN_FILENO, &seq[1], 1) != 1) return '\x1b';
+
+        // Arrow key sequence
+        if(seq[0] == '[') {
+            switch(seq[1]) {
+                case 'A' : return ARROW_UP;
+                case 'B' : return ARROW_DOWN;
+                case 'C' : return ARROW_RIGHT;
+                case 'D' : return ARROW_LEFT;
+            }
+        }
+
+        return '\x1b';
+    } else {
+        return (int) c;
+    }
+
 }
 
 int getCursorPosition(int *rows, int *cols) {

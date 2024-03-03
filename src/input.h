@@ -5,7 +5,7 @@
 
 /* input */
 void editorProcessKeypress() {
-    char c = editorReadKey();
+    int c = editorReadKey();
 
     executeAction(c);
 }
