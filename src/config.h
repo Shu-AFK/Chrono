@@ -11,11 +11,16 @@ struct editorConfig {
     int screencols;
 };
 
-enum arrowKeys {
+enum editorKeys {
     ARROW_LEFT = 1000,
     ARROW_RIGHT = 1001,
     ARROW_UP = 1002,
-    ARROW_DOWN = 1003
+    ARROW_DOWN = 1003,
+    PAGE_UP,
+    PAGE_DOWN,
+    HOME_KEY,
+    END_KEY,
+    DEL_KEY
 };
 
 typedef struct {

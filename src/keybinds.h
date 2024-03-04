@@ -48,19 +48,42 @@ void cursorRightAction() {
     }
 }
 
-void setMultibyteKeybinds(const int pos, const int buf, void (*action)()) {
+void pageUpAction() {
+    E.cy = 0;
+}
+
+void pageDownAction() {
+    E.cy = E.screenrows - 1;
+}
+
+void homeKeyAction() {
+    E.cx = 0;
+}
+
+void endKeyAction() {
+    E.cx = E.screencols - 1;
+}
+
+void delKeyAction() {}
+
+void setKeybind(const int pos, const int buf, void (*action)()) {
     keybinds[pos].input = buf;
     keybinds[pos].action = action;
 }
 
 /* Set Keybinds */
 void setDefaultKeybinds() {
-    setMultibyteKeybinds(0, (int) CTRL_KEY('q'), quitAction);
-    setMultibyteKeybinds(1, (int) CTRL_KEY('o'), openAction);
-    setMultibyteKeybinds(2, ARROW_UP, cursorUpAction);
-    setMultibyteKeybinds(3, ARROW_LEFT, cursorLeftAction);
-    setMultibyteKeybinds(4, ARROW_DOWN, cursorDownAction);
-    setMultibyteKeybinds(5, ARROW_RIGHT, cursorRightAction);
+    setKeybind(0, (int) CTRL_KEY('q'), quitAction);
+    setKeybind(1, (int) CTRL_KEY('o'), openAction);
+    setKeybind(2, ARROW_UP, cursorUpAction);
+    setKeybind(3, ARROW_LEFT, cursorLeftAction);
+    setKeybind(4, ARROW_DOWN, cursorDownAction);
+    setKeybind(5, ARROW_RIGHT, cursorRightAction);
+    setKeybind(6, PAGE_UP, pageUpAction);
+    setKeybind(7, PAGE_DOWN, pageDownAction);
+    setKeybind(8, HOME_KEY, homeKeyAction);
+    setKeybind(9, END_KEY, endKeyAction);
+    setKeybind(10, DEL_KEY, delKeyAction);
 }
 
 // TODO: Load keybinds from settings.json
