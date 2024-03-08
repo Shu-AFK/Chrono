@@ -1,29 +1,23 @@
-# It is currently commented out for future activation when test cases are ready.
-
 name: Build and Run Tests
+
 on: [push, pull_request]
-# jobs:
-#   # Defines the job key. In this case, the job is labeled 'test'.
-#   test:
-#     # Specifies the type of runner that the job will execute on.
-#     runs-on: ubuntu-latest
-#
-#     steps:
-#     # Step 1: Checks out your repository under $GITHUB_WORKSPACE, so your workflow can access it.
-#     - name: Checkout code
-#       uses: actions/checkout@v3
-#
-#     # Step 2: Sets up the environment needed for building C projects.
-#     - name: Set up environment
-#       run: |
-#         sudo apt-get update
-#         sudo apt-get install -y build-essential
-#         # Add commands here to install any other dependencies required for your tests.
-#
-#     # Step 3: Builds and runs tests located in the /tests directory, according to your Makefile.
-#     - name: Build and run tests
-#       working-directory: ./tests
-#       run: |
-#         make clean
-#         make
-#         # The Makefile's 'all' target builds the test executable and runs it.
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up environment
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y build-essential
+        # Add commands to install any other dependencies, if necessary
+
+    - name: Build and run tests
+      working-directory: ./tests
+      run: |
+        make clean
+        make
