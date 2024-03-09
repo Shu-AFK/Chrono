@@ -41,7 +41,7 @@ int createRope(ropeNode **node, ropeNode *parent, char *str, int l, int r) {
         *node = tmp;
 
         int middle = l + (r - l) / 2;
-        if(createRope(&((*node)->left), node, str, l, middle) == -1 || createRope(&((*node)->right), node, str, middle + 1, r) == -1) {
+        if(createRope(&((*node)->left), *node, str, l, middle) == -1 || createRope(&((*node)->right), *node, str, middle + 1, r) == -1) {
             return -1;
         }
     } else { // Leaf nodes (containing a string)
