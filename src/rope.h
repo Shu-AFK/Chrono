@@ -35,7 +35,7 @@ typedef struct {
  * @param r Index of the right boundary of the substring represented by the current node.
  * @return Returns 0 if the rope structure is successfully constructed, -1 if an error occurs (e.g., memory allocation failure).
  */
-int createRope(ropeNode **node, ropeNode *parent, char *str, int l, int r) {
+int createRope(ropeNode **node, ropeNode *parent, char *str, size_t l, size_t r) {
     ropeNode *tmp = malloc(sizeof(ropeNode));
 
     if(tmp == NULL) return -1;
@@ -49,7 +49,7 @@ int createRope(ropeNode **node, ropeNode *parent, char *str, int l, int r) {
         tmp->lCount = (r - l + 1) / 2;
         *node = tmp;
 
-        int middle = l + (r - l) / 2;
+        size_t middle = l + (r - l) / 2;
         if(createRope(&((*node)->left), *node, str, l, middle) == -1 || createRope(&((*node)->right), *node, str, middle + 1, r) == -1) {
             return -1;
         }
@@ -60,8 +60,8 @@ int createRope(ropeNode **node, ropeNode *parent, char *str, int l, int r) {
 
         if(tmp->str == NULL) return -1;
 
-        int j = 0;
-        for(int i = l; i <= r; i++) {
+        size_t j = 0;
+        for(size_t i = l; i <= r; i++) {
             tmp->str[j++] = str[i];
         }
 
@@ -81,12 +81,43 @@ int createRope(ropeNode **node, ropeNode *parent, char *str, int l, int r) {
  * @param r The right index (inclusive) of the current segment of the string being processed.
  * @return An integer value: 0 if the node was successfully created or -1 if an error occurred (such as a failure in memory allocation).
  */
-int initRope(char *str, Rope *root) {
-    size_t len = strlen(str);
-    root->length = len;
-    root->root = NULL;
+int initRope(char *str, Rope **root) {
+    *root = malloc(sizeof(Rope));
+    if (*root == NULL) {
+        return -1; // Memory allocation failure
+    }
 
-    return createRope(&(root->root), NULL, str, 0, len - 1);
+    size_t len = strlen(str);
+    (*root)->length = len;
+    (*root)->root = NULL;
+
+    return createRope(&((*root)->root), NULL, str, 0, len - 1);
+}
+
+/**
+ * @brief Frees all memory associated with a rope.
+ *
+ * @param root The root node of the rope to be freed. If root is NULL, the function does nothing.
+ */
+void freeRopeNode(ropeNode *root) {
+    if (root == NULL) return;
+
+    freeRopeNode(root->left);
+    freeRopeNode(root->right);
+
+    if (root->str != NULL) {
+        free(root->str);
+    }
+
+    free(root);
+}
+
+void freeRope(Rope **root) {
+    if(root == NULL) return;
+
+    freeRopeNode((*root)->root);
+    free(*root);
+    *root = NULL;
 }
 
 int concatenateRopes(Rope **root, Rope **rope1, Rope **rope2) {
