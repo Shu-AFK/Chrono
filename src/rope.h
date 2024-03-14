@@ -46,7 +46,12 @@ int createRope(ropeNode **node, ropeNode *parent, char *str, size_t l, size_t r)
 
     // Non leaf nodes
     if((r - l + 1) > LEAF_LEN) {
-        tmp->lCount = (r - l + 1) / 2;
+        // Making sure it works when getting passed an empty string
+        size_t lcount = 0;
+        if(r - l != 0)
+            lcount = (r - l + 1) / 2;
+
+        tmp->lCount = lcount;
         *node = tmp;
 
         size_t middle = l + (r - l) / 2;
@@ -54,8 +59,13 @@ int createRope(ropeNode **node, ropeNode *parent, char *str, size_t l, size_t r)
             return -1;
         }
     } else { // Leaf nodes (containing a string)
+        // Making sure it works when getting passed an empty string
+        size_t lcount = 0;
+        if(r - l != 0)
+            lcount = (r - l + 1) / 2;
+
         *node = tmp;
-        tmp->lCount = r - l + 1;
+        tmp->lCount = lcount;
         tmp->str = malloc(sizeof(char) * (r - l + 2));
 
         if(tmp->str == NULL) return -1;
@@ -90,6 +100,9 @@ int initRope(char *str, Rope **root) {
     size_t len = strlen(str);
     (*root)->length = len;
     (*root)->root = NULL;
+
+    if(len == 0)
+        return createRope(&((*root)->root), NULL, str, 0, len);
 
     return createRope(&((*root)->root), NULL, str, 0, len - 1);
 }

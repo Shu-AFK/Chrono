@@ -1,8 +1,3 @@
-// TODO: Fix core dump issue
-
-#ifndef CHRONO_TEST_ROPE
-#define CHRONO_TEST_ROPE
-
 #include "Unity/src/unity.h"
 #include "../src/rope.h"
 
@@ -47,4 +42,19 @@ void test_initRope_NonEmptyString() {
     TEST_ASSERT_NULL(myRope);
 }
 
-#endif // CHRONO_TEST_ROPE
+void setUp(void) {
+    // Prepare stuff before each test, if needed
+}
+
+void tearDown(void) {
+    // Clean up stuff after each test, if needed
+}
+
+int main(void) {
+    UNITY_BEGIN();
+
+    RUN_TEST(test_initRope_EmptyString);
+    RUN_TEST(test_initRope_NonEmptyString);
+
+    return UnityEnd();
+}

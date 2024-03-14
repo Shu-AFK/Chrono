@@ -20,16 +20,20 @@ OBJ_FILES := $(SRC_FILES:.c=.o)
 # Output executable for tests
 TEST_EXEC := tests
 
+# Compiler flags, added -g for gdb debugging
+CFLAGS := -g
+
 .PHONY: all clean
 
 all: $(TEST_EXEC)
 	./$(TEST_EXEC)
 
 $(TEST_EXEC): $(OBJ_FILES)
-	$(CC) -o $@ $^
+	$(CC) $(CFLAGS) -o $@ $^
 
 %.o: %.c
-	$(CC) $(INCLUDES) -c $< -o $@
+	 $(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 clean:
-	rm -f $(OBJ_FILES) $(TEST_EXEC)
+	 rm -f $(OBJ_FILES) $(TEST_EXEC)
+
