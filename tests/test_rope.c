@@ -1,5 +1,6 @@
 #include "Unity/src/unity.h"
 #include "../src/rope.h"
+#include "stdlib.h"
 
 void test_initRope_EmptyString() {
     Rope *myRope = NULL;
@@ -55,6 +56,8 @@ void test_getString_NonEmptyString() {
 
     TEST_ASSERT_NOT_NULL(stored);
     TEST_ASSERT_EQUAL_STRING(str, stored);
+
+    free(stored);
 
     freeRope(&myRope);
     TEST_ASSERT_NULL(myRope);
