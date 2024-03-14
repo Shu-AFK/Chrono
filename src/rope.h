@@ -1,3 +1,12 @@
+// TODO: Implement a split function
+// TODO: Implement a insert function
+// TODO: Implement a delete function
+// TODO: Implement an indexing function
+// TODO: Implement a search function
+// TODO: Implement a way to balance the rope
+// TODO: Implement a way to simply iterate over a rope
+// maybe in the futer, add some sort of modification tracking to allow undo / redo operations
+
 #ifndef CHRONO_ROPE
 #define CHRONO_ROPE
 
