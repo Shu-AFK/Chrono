@@ -14,6 +14,7 @@ typedef struct ropeNode {
     struct ropeNode *parent;
     char *str;
     size_t lCount;
+    int refCount;
 } ropeNode;
 
 typedef struct {
@@ -43,6 +44,7 @@ int createRope(ropeNode **node, ropeNode *parent, char *str, size_t l, size_t r)
     tmp->left = tmp->right = NULL;
     tmp->parent = parent;
     tmp->str = NULL;
+    tmp->refCount = 1;
 
     // Non leaf nodes
     if((r - l + 1) > LEAF_LEN) {
@@ -115,6 +117,10 @@ int initRope(char *str, Rope **root) {
 void freeRopeNode(ropeNode *root) {
     if (root == NULL) return;
 
+    root->refCount--;
+
+    if(root->refCount > 0) return;
+
     freeRopeNode(root->left);
     freeRopeNode(root->right);
 
@@ -127,6 +133,8 @@ void freeRopeNode(ropeNode *root) {
 
 /**
  * @brief Frees a Rope pointer and assigsnt it to NULL
+ *
+ * @note Ensure that you free a concatenated rope before freeing the individual ropes
  */
 void freeRope(Rope **root) {
     if(root == NULL) return;
@@ -174,7 +182,33 @@ char *getWholeString(Rope *root) {
     return str;
 }
 
-int concatenateRopes(Rope **root, Rope **rope1, Rope **rope2) {
+/**
+ * @brief concatenates two ropes
+ *
+ * @param root The pointer to the new rope, it has to be uninitialised
+ * @param rope1 The left side of the new rope
+ * @param rope2 The right side of the new rope
+ * @return 0 for success, -1 for failure
+ */
+int concatenateRopes(Rope **root, Rope *rope1, Rope *rope2) {
+    *root = malloc(sizeof(Rope));
+    if(*root == NULL) return -1;
+
+    (*root)->root = malloc(sizeof(ropeNode));
+    if((*root)->root == NULL) return -1;
+    (*root)->root->str = NULL;
+
+    (*root)->length = rope1->length + rope2->length;
+    (*root)->root->left = rope1->root;
+    (*root)->root->right = rope2->root;
+
+    rope1->root->parent = (*root)->root;
+    rope2->root->parent = (*root)->root;
+
+    rope1->root->refCount++;
+    rope2->root->refCount++;
+
+    (*root)->root->lCount = rope1->length;
     return 0;
 }
 

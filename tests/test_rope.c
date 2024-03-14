@@ -63,6 +63,41 @@ void test_getString_NonEmptyString() {
     TEST_ASSERT_NULL(myRope);
 }
 
+void test_concatenation() {
+    Rope *rope1 = NULL;
+    Rope *rope2 = NULL;
+    int result = initRope("abc", &rope1);
+
+    TEST_ASSERT_EQUAL_INT(0, result);
+    TEST_ASSERT_NOT_NULL(rope1->root);
+    TEST_ASSERT_EQUAL_INT(3, rope1->length);
+
+    result = initRope("def", &rope2);
+
+    TEST_ASSERT_EQUAL_INT(0, result);
+    TEST_ASSERT_NOT_NULL(rope2->root);
+    TEST_ASSERT_EQUAL_INT(3, rope2->length);
+
+    Rope *concatenated = NULL;
+    result = concatenateRopes(&concatenated, rope1, rope2);
+
+    TEST_ASSERT_EQUAL_INT(result, 0);
+    TEST_ASSERT_NOT_NULL(concatenated->root);
+    TEST_ASSERT_EQUAL_INT(6, concatenated->length);
+
+    char *stored = getWholeString(concatenated);
+
+    TEST_ASSERT_NOT_NULL(stored);
+    TEST_ASSERT_EQUAL_STRING(stored, "abcdef");
+
+    freeRope(&concatenated);
+    TEST_ASSERT_NULL(concatenated);
+    freeRope(&rope1);
+    TEST_ASSERT_NULL(rope1);
+    freeRope(&rope2);
+    TEST_ASSERT_NULL(rope2);
+}
+
 void setUp(void) {
     // Prepare stuff before each test, if needed
 }
@@ -77,6 +112,7 @@ int main(void) {
     RUN_TEST(test_initRope_EmptyString);
     RUN_TEST(test_initRope_NonEmptyString);
     RUN_TEST(test_getString_NonEmptyString);
+    RUN_TEST(test_concatenation);
 
     return UnityEnd();
 }
