@@ -1,5 +1,5 @@
 # Chrono
-
+![Build Status](https://github.com/Shu-AFK/Chrono/blob/main/.github/workflows/makefile.yml/badge.svg) ![tests](https://github.com/Shu-AFK/Chrono/blob/main/.github/workflows/run-tests.yml/badge.svg) ![License](https://img.shields.io/badge/license-MIT-blue)
 Chrono is a terminal-based text editor for Linux(Currently in development), designed for efficiency and simplicity. Inspired by the timelessness of text-based interfaces, Chrono provides a streamlined editing experience directly from your terminal. With a focus on performance and usability, Chrono aims to be a powerful tool for developers, writers, and terminal enthusiasts alike.
 
 ## Features
