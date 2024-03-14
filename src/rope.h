@@ -125,12 +125,53 @@ void freeRopeNode(ropeNode *root) {
     free(root);
 }
 
+/**
+ * @brief Frees a Rope pointer and assigsnt it to NULL
+ */
 void freeRope(Rope **root) {
     if(root == NULL) return;
 
     freeRopeNode((*root)->root);
     free(*root);
     *root = NULL;
+}
+
+/*
+ * @brief gets the substring store inside a ropeNode
+ *
+ * @param node the node of the string you want to get the substring of
+ * @param buffer the char * buffer where the substring will be stored
+ * @param index (initially 0)
+ */
+void getSubstring(ropeNode *node, char *buffer, int *index) {
+    if(node == NULL) return;
+
+    getSubstring(node->left, buffer, index);
+
+    size_t length = 0;
+    if(node->str != NULL)
+        length = strlen(node->str);
+
+    memcpy(buffer + *index, node->str, length);
+    *index += length;
+
+    getSubstring(node->right, buffer, index);
+}
+
+/*
+ * @brief Gets the string inside a rope
+ *
+ * @param root a pointer to the rope of the string you want to get the string of.
+ * @return the char * of the string inside a rope
+ */
+char *getWholeString(Rope *root) {
+    char *str = malloc(root->length + 1);
+    if(str == NULL) return NULL;
+
+    int index = 0;
+    getSubstring(root->root, str, &index);
+    str[root->length] = '\0';
+    return str;
 }
 
 int concatenateRopes(Rope **root, Rope **rope1, Rope **rope2) {

@@ -42,6 +42,24 @@ void test_initRope_NonEmptyString() {
     TEST_ASSERT_NULL(myRope);
 }
 
+void test_getString_NonEmptyString() {
+    Rope *myRope = NULL;
+    char *str = "abcdefg";
+    int result = initRope(str, &myRope);
+
+    TEST_ASSERT_EQUAL_INT(0, result);
+    TEST_ASSERT_NOT_NULL(myRope->root);
+    TEST_ASSERT_EQUAL_INT(strlen(str), myRope->length);
+
+    char *stored = getWholeString(myRope);
+
+    TEST_ASSERT_NOT_NULL(stored);
+    TEST_ASSERT_EQUAL_STRING(str, stored);
+
+    freeRope(&myRope);
+    TEST_ASSERT_NULL(myRope);
+}
+
 void setUp(void) {
     // Prepare stuff before each test, if needed
 }
@@ -55,6 +73,7 @@ int main(void) {
 
     RUN_TEST(test_initRope_EmptyString);
     RUN_TEST(test_initRope_NonEmptyString);
+    RUN_TEST(test_getString_NonEmptyString);
 
     return UnityEnd();
 }

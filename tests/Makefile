@@ -27,6 +27,7 @@ CFLAGS := -g
 
 all: $(TEST_EXEC)
 	./$(TEST_EXEC)
+	rm -f $(OBJ_FILES) # removes all .o files after running the test file
 
 $(TEST_EXEC): $(OBJ_FILES)
 	$(CC) $(CFLAGS) -o $@ $^
