@@ -11,6 +11,7 @@ Chrono is a terminal-based text editor for Linux(Currently in development), desi
 - **Terminal-based:** Operate entirely within your terminal, reducing the need to switch contexts and enhancing your workflow.
 - **(Upcoming)Customizable:** Tailor Chrono to your preferences for a personalized editing experience.
 - **(Upcoming) Plugin Support:** Future versions will include support for plugins, allowing you to extend its functionality and integrate with other tools seamlessly.
+- **(Upcoming) Colaborative editing support:** Future versions will include the ability to work cooperativly on projects simultaniously.
 
 ## Installation
 
