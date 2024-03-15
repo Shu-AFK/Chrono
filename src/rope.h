@@ -1,7 +1,5 @@
-// TODO: Implement a split function
 // TODO: Implement a insert function
 // TODO: Implement a delete function
-// TODO: Implement an indexing function
 // TODO: Implement a search function
 // TODO: Implement a way to balance the rope
 // TODO: Implement a way to simply iterate over a rope
@@ -46,6 +44,7 @@ typedef struct {
  * @return Returns 0 if the rope structure is successfully constructed, -1 if an error occurs (e.g., memory allocation failure).
  */
 int createRope(ropeNode **node, ropeNode *parent, char *str, size_t l, size_t r) {
+    if(l > r) return -1;
     ropeNode *tmp = malloc(sizeof(ropeNode));
 
     if(tmp == NULL) return -1;
@@ -90,6 +89,24 @@ int createRope(ropeNode **node, ropeNode *parent, char *str, size_t l, size_t r)
     }
 
     return 0;
+}
+
+/**
+ * @brief creates a new rope node
+ *
+ * @param str the string getting saved
+ * @param parent the parent of the node
+ * @return the pointer to the newly created node
+ */
+ropeNode *createNode(char *str, ropeNode *parent) {
+    ropeNode *tmp = malloc(sizeof(ropeNode));
+    tmp->str = str;
+    tmp->parent = parent;
+    tmp->left = tmp->right = NULL;
+    tmp->lCount = 0;
+    tmp->refCount = 1;
+
+    return tmp;
 }
 
 /**
@@ -219,6 +236,95 @@ int concatenateRopes(Rope **root, Rope *rope1, Rope *rope2) {
 
     (*root)->root->lCount = rope1->length;
     return 0;
+}
+
+/**
+ * @brief gets the node at a position
+ *
+ * @param source the root of the node
+ * @param the position you want to index into
+ * @return a pointer to the ropeNode at the index
+ */
+ropeNode *getLeafbyCharpos(ropeNode *source, size_t position) {
+    if(source == NULL) return NULL;
+    if(source->str != NULL) return source;
+
+    if(position < source->lCount) {
+        return getLeafbyCharpos(source->left, position);
+    } else {
+        position -= source->lCount;
+        return getLeafbyCharpos(source->right, position);
+    }
+}
+
+/**
+ * @brief this function returns a pointer to a node based on position for splitting a rope
+ *
+ * @param source the rope you want to index
+ * @param position the position of the node you want to get
+ * @param offset(initially 0) will contain the position of the character for splitting of the node returned is a leaf node
+ * @return the pointer to the node
+ */
+ropeNode *getNodeByPos(ropeNode *source, size_t position, size_t *offset) {
+    if(source == NULL || position == 0) {
+        *offset = 0;
+        return NULL;
+    }
+
+    // Non leaf node
+    if(source->left != NULL) {
+        if(position <= source->left->lCount) {
+            return getNodeByPos(source->left, position, offset);
+        } else {
+            ropeNode *result = getNodeByPos(source->right, position - source->left->lCount, offset);
+            if(result == NULL) {
+                *offset = position - source->left->lCount;
+                return source;
+            }
+            return result;
+        }
+    // Leaf node
+    } else if(source->right == NULL) {
+        *offset = position;
+        return source;
+    }
+
+    return NULL;
+}
+
+/**
+ * @brief spilts one rope into two
+ *
+ * @param source the source rope you want to split from
+ * @param position the position of the node you want to split from
+ * @param rope1 the left half of the split (uninitialised)
+ * @param rope2 the right half of the split (uninitialised)
+ * @return 0 for success, -1 for failure
+ */
+int splitRope(Rope *source, size_t position, Rope **rope1, Rope **rope2) {
+    if(source == NULL || position > source->length) return -1;
+
+    size_t offset = 0;
+    ropeNode *index = getNodeByPos(source->root, position, &offset);
+    if(index == NULL && offset == 0) return -1;
+
+    *rope1 = malloc(sizeof(Rope));
+    *rope2 = malloc(sizeof(Rope));
+    if(*rope1 == NULL || *rope2 == NULL) return -1;
+
+    // Non leaf node
+    if(offset == 0) {
+        (*rope1)->root = index->left;
+        (*rope1)->root->refCount++;
+        (*rope1)->length = index->left->lCount * 2;
+
+        (*rope2)->root = index->right;
+        (*rope2)->root->refCount++;
+        (*rope2)->length = index->right->lCount * 2;
+        return 0;
+    } else { // Leaf node
+        // TODO: Need to implement
+    }
 }
 
 #endif // CHRONO_ROPE
