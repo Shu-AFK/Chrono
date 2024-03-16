@@ -22,6 +22,7 @@ jobs:
       working-directory: ./tests
       run: |
         chmod +x compile-run-tests.sh
+        # gets all files and runs the test script
         for test_file in *.c; do
           ./compile-run-tests.sh "${test_file%.*}"
         done
