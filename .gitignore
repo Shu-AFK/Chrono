@@ -1,4 +1,5 @@
 *.d
 *.o
 build/
+obj/
 notes.txt

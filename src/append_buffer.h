@@ -11,17 +11,7 @@ struct abuf {
     int len;
 };
 
-void appendBuf(struct abuf *ab, const char *s, int len) {
-    char *new = realloc(ab->buf, ab->len + len);
-
-    if(new == NULL) return; // out of memory
-    memcpy(&new[ab->len], s, len);
-    ab->buf = new;
-    ab->len += len;
-}
-
-void freeBuf(struct abuf *ab) {
-    free(ab->buf);
-}
+void appendBuf(struct abuf *ab, const char *s, int len);
+void freeBuf(struct abuf *ab);
 
 #endif
