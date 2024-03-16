@@ -33,6 +33,12 @@ void test_rope_functions() {
     TEST_ASSERT_NOT_NULL(content);
     TEST_ASSERT_EQUAL_STRING(content, "afg");
 
+    free(content);
+    Rope_insert_str(rope, 2, "Hello");
+    content = Rope_get_entire_content(rope);
+    TEST_ASSERT_NOT_NULL(content);
+    TEST_ASSERT_EQUAL_STRING(content, "afHellog");
+
     Rope_delete(rope);
 }
 

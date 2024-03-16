@@ -28,6 +28,10 @@ void Rope_insert(Rope rope, size_t pos, char c) {
     static_cast<__gnu_cxx::rope<char>*>(rope)->insert(pos, c);
 }
 
+void Rope_insert_str(Rope rope, size_t pos, char *str) {
+    static_cast<__gnu_cxx::rope<char>*>(rope)->insert(pos, str);
+}
+
 void Rope_erase(Rope rope, size_t begin, size_t length) {
     static_cast<__gnu_cxx::rope<char>*>(rope)->erase(begin, length);
 }

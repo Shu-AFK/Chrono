@@ -16,6 +16,7 @@ void Rope_delete(Rope rope);
 void Rope_push_back(Rope rope, char c);
 void Rope_pop_back(Rope rope);
 void Rope_insert(Rope rope, size_t pos, char c);
+void Rope_insert_str(Rope rope, size_t pos, char *str);
 void Rope_erase(Rope rope, size_t begin, size_t length);
 Rope Rope_substr(Rope rope, size_t begin, size_t length);
 void Rope_concat(Rope rope1, Rope rope2);
