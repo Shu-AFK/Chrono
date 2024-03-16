@@ -1,0 +1,1 @@
+Instead of inserting every character on the user typing, instead store it inside of an array of some sort, boosting performance
