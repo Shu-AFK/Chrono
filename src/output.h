@@ -8,6 +8,7 @@
 #include "terminal.h"
 #include "append_buffer.h"
 #include "chrono.h"
+#include "rope_wrapper.h"
 
 #define LOGOLINES 7
 
@@ -90,13 +91,17 @@ void drawWelcome(struct abuf *ab) {
     free(logoCopy);
 }
 
-void editorRefreshScreen() {
+// If option = 0, no file is selected, if 1 a file is opened
+void editorRefreshScreen(int option, Rope rope) {
     struct abuf ab = ABUF_INIT;
 
     appendBuf(&ab, "\x1b[?25l", 6); // Hides the cursor
     appendBuf(&ab, "\x1b[H", 3); // Moves the cursor to the top left position
 
-    drawWelcome(&ab);
+    if(option == 0)
+        drawWelcome(&ab);
+    else
+        Rope_to_buffer(rope, &ab, E.cx, E.cx + E.screenrows, E.cy, E.cy + E.screencols);
 
     char buf[32];
     snprintf(buf, sizeof(buf), "\x1b[%d;%dH", E.cy + 1, E.cx + 1);

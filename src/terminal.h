@@ -131,7 +131,7 @@ void initEditor() {
     E.cy = 0;
 
     if(getWindowSize(&E.screenrows, &E.screencols) == -1) die("getWindowSize");
-    write(STDOUT_FILENO, "\x1b[H", 3); // Moves the cursor to the top right of the screen
+    write(STDOUT_FILENO, "\x1b[H", 3); // Moves the cursor to the top left of the screen
 }
 
 #endif // CHRONO_TERMINAL

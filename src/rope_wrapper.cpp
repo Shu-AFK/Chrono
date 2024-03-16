@@ -59,43 +59,32 @@ size_t Rope_get_maxlen(Rope rope) {
 }
 
 int Rope_to_buffer(Rope rope, struct abuf *ab, int x1, int x2, int y1, int y2) {
-    if(x2 < x1) return -1;
-    if(y2 < y1) return -1;
+    if (x2 < x1 || y2 < y1) return -1;
 
     __gnu_cxx::rope<char>* r = static_cast<__gnu_cxx::rope<char>*>(rope);
-    __gnu_cxx::rope<char>::iterator it = (*r).mutable_begin();
-    __gnu_cxx::rope<char>::iterator end = (*r).mutable_end();
+    __gnu_cxx::rope<char>::iterator it = r->mutable_begin();
+    __gnu_cxx::rope<char>::iterator end = r->mutable_end();
 
-    size_t lines = 0;
-    size_t length = 0;
+    int currentLine = 0, currentColumn = 0;
 
-    char *buffer = (char *) malloc((x2 - x1) + 1);
-    if(buffer == NULL) return -2;
-
-    size_t i = 0;
-
-    for(; it != end; it++) {
-        if((*it) == '\n') {
-            lines++;
-            length = 0;
-            buffer[i] = '\n';
-            buffer[i + 1] = '\0';
-            appendBuf(ab, buffer, i);
-            i = length = 0;
+    for (; it != end; ++it) {
+        if (currentLine > y2) break;  // Past the end line
+        if (*it == '\n') {
+            if (currentLine >= y1 && currentLine <= y2) {
+                appendBuf(ab, "\n", 1);  // Append newline for lines within the range
+            }
+            currentLine++;
+            currentColumn = 0;  // Reset column count at each newline
             continue;
         }
 
-        if(length <= x2 && length >= x1 && lines <= y2 && lines >= y1) {
-            buffer[i] = (*it);
-            i++;
+        if (currentLine >= y1 && currentLine <= y2 && currentColumn >= x1 && currentColumn < x2) {
+            char c = *it;
+            appendBuf(ab, &c, 1);  // Append character if within specified rectangle
         }
-
-        if(lines > y2) break;
-
-        length++;
+        currentColumn++;
     }
 
-    free(buffer);
     return 0;
 }
 

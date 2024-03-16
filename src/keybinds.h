@@ -22,8 +22,6 @@ void quitAction() {
     exit(0);
 }
 
-void openAction() {}
-
 void cursorUpAction() {
     if(E.cy != 0) {
         E.cy--;
@@ -74,7 +72,6 @@ void setKeybind(const int pos, const int buf, void (*action)()) {
 /* Set Keybinds */
 void setDefaultKeybinds() {
     setKeybind(0, (int) CTRL_KEY('q'), quitAction);
-    setKeybind(1, (int) CTRL_KEY('o'), openAction);
     setKeybind(2, ARROW_UP, cursorUpAction);
     setKeybind(3, ARROW_LEFT, cursorLeftAction);
     setKeybind(4, ARROW_DOWN, cursorDownAction);
