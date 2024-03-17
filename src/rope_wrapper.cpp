@@ -51,10 +51,16 @@ void Rope_replace_str(Rope rope, size_t beginning, size_t length, char *str) {
 }
 
 size_t Rope_get_length(Rope rope) {
+    if (!rope)
+        return 0;
+
     return static_cast<__gnu_cxx::rope<char>*>(rope)->size();
 }
 
 size_t Rope_get_maxlen(Rope rope) {
+    if (!rope)
+        return 0;
+
     return static_cast<__gnu_cxx::rope<char>*>(rope)->max_size();
 }
 

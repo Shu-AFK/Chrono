@@ -9,7 +9,7 @@
 int main(int argc, char **argv) {
     if(argc > 2) return -1;
 
-    Rope rope;
+    Rope rope = Rope_create("");
 
     if(argc == 2) {
         if(openFile(&rope, argv[1]) == -1) return -1;
