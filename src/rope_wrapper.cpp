@@ -64,7 +64,38 @@ size_t Rope_get_maxlen(Rope rope) {
     return static_cast<__gnu_cxx::rope<char>*>(rope)->max_size();
 }
 
-int Rope_to_buffer(Rope rope, struct abuf *ab, int x1, int x2, int y1, int y2) {
+void Rope_get_line_lengths(Rope rope, size_t *lengths[], size_t y1, size_t y2) {
+    __gnu_cxx::rope<char>* r = static_cast<__gnu_cxx::rope<char>*>(rope);
+    __gnu_cxx::rope<char>::iterator it;
+    __gnu_cxx::rope<char>::iterator end = (*r).mutable_end();
+
+    int num_lines = y2 - y1 + 1;
+    *lengths = new size_t[num_lines];
+
+    size_t lines = 0;
+    size_t length = 0;
+    size_t i = 0;
+
+    for(it = (*r).mutable_begin(); it != end; it++) {
+        if(lines > y2)
+            break;
+
+        if(lines < y1 && (*it) != '\r')
+            continue;
+
+        if((*it) == '\r') {
+            lines++;
+            (*lengths)[i] = length;
+            length = 0;
+            i++;
+            continue;
+        }
+
+        length++;
+    }
+}
+
+int Rope_to_buffer(Rope rope, struct abuf *ab, size_t x1, size_t x2, size_t y1, size_t y2) {
     if (x2 < x1 || y2 < y1) return -1;
 
     __gnu_cxx::rope<char>* r = static_cast<__gnu_cxx::rope<char>*>(rope);
@@ -72,25 +103,35 @@ int Rope_to_buffer(Rope rope, struct abuf *ab, int x1, int x2, int y1, int y2) {
     __gnu_cxx::rope<char>::iterator end = r->mutable_end();
 
     int currentLine = 0, currentColumn = 0;
+    size_t *line_lengths = nullptr;
+    size_t i = 0;
+
+    int prev_x = -1;
+
+    Rope_get_line_lengths(rope, &line_lengths, y1, y2);
 
     for (; it != end; ++it) {
         if (currentLine > y2) break;  // Past the end line
+        prev_x++;
         if (*it == '\n') {
             if (currentLine >= y1 && currentLine <= y2) {
                 appendBuf(ab, "\r\n", 2);  // Append newline for lines within the range
             }
             currentLine++;
-            currentColumn = 0;  // Reset column count at each newline
+            currentColumn = 0;
+            i++;
+            prev_x = -1;
             continue;
         }
 
-        if (currentLine >= y1 && currentLine <= y2 && currentColumn >= x1 && currentColumn < x2) {
+        if (currentLine >= y1 && currentLine <= y2 && currentColumn >= x1 && currentColumn <= x2 - line_lengths[i] && prev_x !=  - line_lengths[i]) {
             char c = *it;
             appendBuf(ab, &c, 1);  // Append character if within specified rectangle
         }
         currentColumn++;
     }
 
+    delete line_lengths;
     return 0;
 }
 

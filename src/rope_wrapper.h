@@ -25,7 +25,7 @@ void Rope_replace_str(Rope rope, size_t beginning, size_t length, char *str);
 size_t Rope_get_length(Rope rope);
 size_t Rope_get_maxlen(Rope rope);
 
-int Rope_to_buffer(Rope rope, struct abuf *ab, int x1, int x2, int y1, int y2);
+int Rope_to_buffer(Rope rope, struct abuf *ab, size_t x1, size_t x2, size_t y1, size_t y2);
 size_t Rope_get_lines_lengths(Rope rope, size_t *lengths[]);
 char *Rope_get_entire_content(Rope rope);
 size_t Rope_get_lines(Rope rope);

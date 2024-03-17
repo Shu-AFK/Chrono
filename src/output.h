@@ -96,12 +96,14 @@ void editorRefreshScreen(int option, Rope rope) {
     struct abuf ab = ABUF_INIT;
 
     appendBuf(&ab, "\x1b[?25l", 6); // Hides the cursor
+    appendBuf(&ab, "\x1b[2J", 4);
     appendBuf(&ab, "\x1b[H", 3); // Moves the cursor to the top left position
 
     if(option == 0)
         drawWelcome(&ab);
-    else
+    else {
         Rope_to_buffer(rope, &ab, E.cx, E.cx + E.screencols, E.cy, E.cy + E.screenrows);
+    }
 
     char buf[32];
     snprintf(buf, sizeof(buf), "\x1b[%d;%dH", E.cy + 1, E.cx + 1);
