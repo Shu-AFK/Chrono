@@ -101,7 +101,7 @@ void editorRefreshScreen(int option, Rope rope) {
     if(option == 0)
         drawWelcome(&ab);
     else
-        Rope_to_buffer(rope, &ab, E.cx, E.cx + E.screenrows, E.cy, E.cy + E.screencols);
+        Rope_to_buffer(rope, &ab, E.cx, E.cx + E.screencols, E.cy, E.cy + E.screenrows);
 
     char buf[32];
     snprintf(buf, sizeof(buf), "\x1b[%d;%dH", E.cy + 1, E.cx + 1);
