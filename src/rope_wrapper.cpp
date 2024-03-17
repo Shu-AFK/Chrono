@@ -77,7 +77,7 @@ int Rope_to_buffer(Rope rope, struct abuf *ab, int x1, int x2, int y1, int y2) {
         if (currentLine > y2) break;  // Past the end line
         if (*it == '\n') {
             if (currentLine >= y1 && currentLine <= y2) {
-                appendBuf(ab, "\n", 1);  // Append newline for lines within the range
+                appendBuf(ab, "\r\n", 2);  // Append newline for lines within the range
             }
             currentLine++;
             currentColumn = 0;  // Reset column count at each newline
