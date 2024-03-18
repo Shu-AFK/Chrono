@@ -11,6 +11,12 @@ extern "C" {
 
 typedef void* Rope;
 
+typedef struct _Rope {
+    Rope rope;
+    size_t lines;
+    size_t lengths[];
+} _Rope;
+
 Rope Rope_create(char *str);
 void Rope_delete(Rope rope);
 void Rope_push_back(Rope rope, char c);

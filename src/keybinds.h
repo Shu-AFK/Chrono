@@ -25,6 +25,8 @@ void quitAction() {
 void cursorUpAction() {
     if(E.cy != 0) {
         E.cy--;
+    } else {
+        E.cy = 0;
     }
 }
 
@@ -37,6 +39,8 @@ void cursorDownAction() {
 void cursorLeftAction() {
     if(E.cx != 0) {
         E.cx--;
+    } else {
+        E.cx = 0;
     }
 }
 
